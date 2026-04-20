@@ -12,24 +12,31 @@
                 <div class="main-fields">
                     <div class="main-field" id="fromField">
                         <div class="main-pin"></div>
-                        <input id="from" formControlName="from" placeholder="Откуда: начните вводить адрес"
-                            autocomplete="off" />
+                        <input id="from" formControlName="from" [attr.disabled]="!!orderId()"
+                            placeholder="Откуда: начните вводить адрес" autocomplete="off" />
                         <div class="main-ac" id="fromAc" role="listbox" aria-label="Подсказки адресов"></div>
                     </div>
 
+                    @if (this.routeForm.get('from')?.invalid && (this.routeForm.get('from')?.dirty ||
+                    this.routeForm.get('from')?.touched)) {
+                    <label for="from" class="input-error">Заполните поле Откуда</label>
+                    }
+
                     <div class="main-field" id="toField">
                         <div class="main-pin"></div>
-                        <input id="to" formControlName="to" placeholder="Куда: начните вводить адрес"
-                            autocomplete="off" />
+                        <input id="to" formControlName="to" [attr.disabled]="!!orderId()"
+                            placeholder="Куда: начните вводить адрес" autocomplete="off" />
                         <div class="main-ac" id="toAc" role="listbox" aria-label="Подсказки адресов"></div>
                     </div>
+                    @if (this.routeForm.get('to')?.invalid && (this.routeForm.get('to')?.dirty ||
+                    this.routeForm.get('to')?.touched)) {
+                    <label for="from" class="input-error">Заполните поле Куда</label>
+                    }
                 </div>
             </div>
-            <div class="main-package">
+            <div class="main-package" [style.display]="orderId() ? 'none' : null">
                 <div class="main-block-title">Размер посылки</div>
-
                 <div class="main-sizes">
-
                     @for (size of sizes; track size.value) {
                     <div class="main-size-card" [class.is-active]="routeForm.value.size === size.value"
                         (click)="selectSize(size.value)">
@@ -43,82 +50,13 @@
                         <div class="main-size-description" [innerHTML]="size.description"></div>
                     </div>
                     }
-                    <!-- <div class="main-size-card is-active" data-value="xs">
-                        <div class="main-size-top">
-                            <div class="main-size-label">XS</div>
-                            <div class="main-size-rate">9 ₽/км</div>
-                        </div>
-                        <div class="main-size-media">
-                            <img src="img/sizes/xs.png" alt="Короб XS" />
-                        </div>
-                        <div class="main-size-description">17×12×9 см,<br>до 0.5 кг</div>
-                    </div> -->
-
-                    <!-- <div class="main-size-card" data-value="s">
-                        <div class="main-size-top">
-                            <div class="main-size-label">S</div>
-                            <div class="main-size-rate">13 ₽/км</div>
-                        </div>
-                        <div class="main-size-media">
-                            <img src="img/sizes/s.png" alt="Короб S" />
-                        </div>
-                        <div class="main-size-description">23×19×10 см,<br>до 2 кг</div>
-                    </div> -->
-
-                    <!-- <div class="main-size-card" data-value="m">
-                        <div class="main-size-top">
-                            <div class="main-size-label">M</div>
-                            <div class="main-size-rate">20 ₽/км</div>
-                        </div>
-                        <div class="main-size-media">
-                            <img src="img/sizes/m.png" alt="Короб M" />
-                        </div>
-                        <div class="main-size-description">33×25×15 см,<br>до 5 кг</div>
-                    </div> -->
-
-                    <!-- <div class="main-size-card" data-value="l">
-                        <div class="main-size-top">
-                            <div class="main-size-label">L</div>
-                            <div class="main-size-rate">27 ₽/км</div>
-                        </div>
-                        <div class="main-size-media">
-                            <img src="img/sizes/l.png" alt="Короб L" />
-                        </div>
-                        <div class="main-size-description">31×25×38 см,<br>до 12 кг</div>
-                    </div> -->
-
-                    <!-- <div class="main-size-card" data-value="xl">
-                        <div class="main-size-top">
-                            <div class="main-size-label">XL</div>
-                            <div class="main-size-rate">35 ₽/км</div>
-                        </div>
-                        <div class="main-size-media">
-                            <img src="img/sizes/xl.png" alt="Короб XL" />
-                        </div>
-                        <div class="main-size-description">60×35×30 см,<br>до 18 кг</div>
-                    </div> -->
-                    <!-- <div class="main-size-card" data-value="max">
-                        <div class="main-size-top">
-                            <div class="main-size-label">MAX</div>
-                            <div class="main-size-rate">70 ₽/км</div>
-                        </div>
-                        <div class="main-size-media main-size-media-palleta">
-                            <img src="img/sizes/max.png" alt="Паллета" />
-                        </div>
-                        <div class="main-size-description">120×120×80 см,<br>до 200 кг</div>
-                    </div> -->
-
-
-
-
-
                 </div>
             </div>
 
             <div class="main-speed">
                 <div class="main-block-title">Скорость доставки</div>
 
-                <div class="main-speeds">
+                <div class="main-speeds" [style.display]="orderId() ? 'none' : null">
                     @for (speed of speeds; track speed.value) {
                     <div class="main-speed-card" [class.is-active]="routeForm.value.speed === speed.value"
                         (click)="selectSpeed(speed.value)">
@@ -136,7 +74,7 @@
                     </div> -->
                 </div>
             </div>
-            <div class="main-calculate-block">
+            <div class="main-calculate-block" [style.display]="orderId() ? 'none' : null">
                 <button id="calc" class="button calculate-button" type="button" [disabled]="routeForm.invalid"
                     (click)="calculate()">Рассчитать</button>
             </div>
@@ -157,7 +95,8 @@
                 </div>
             </div>
             <div class="main-order-box">
-                <div class="main-order-form" id="orderForm" [formGroup]="orderForm" [style.display]="orderId() ? 'none' : null">
+                <div class="main-order-form" id="orderForm" [formGroup]="orderForm"
+                    [style.display]="orderId() ? 'none' : null">
                     <div class="main-order-title">Оформление доставки</div>
                     <div class="main-block-info-row">
                         <div class="main-block-title">Контакты</div>
@@ -170,6 +109,18 @@
                                 <input id="customerPhone" formControlName="phone" placeholder="Ваш телефон"
                                     autocomplete="off" inputmode="tel" />
                             </div>
+                            <div>
+                                @if (this.orderForm.get('name')?.invalid && (this.orderForm.get('name')?.dirty ||
+                                this.orderForm.get('name')?.touched)) {
+                                <label for="customerName" class="input-error">Заполните имя</label>
+                                }
+                            </div>
+                            <div>
+                                @if (this.orderForm.get('phone')?.invalid && (this.orderForm.get('phone')?.dirty ||
+                                this.orderForm.get('phone')?.touched)) {
+                                <label for="customerName" class="input-error">Заполните телефон</label>
+                                }
+                            </div>
                         </div>
                     </div>
                     <div class="main-block-info-row extra-info">
@@ -179,7 +130,8 @@
                                 placeholder="Детали доставки и комментарии"></textarea>
                         </div>
                     </div>
-                    <button id="submit" class="button main-submit-request" type="button" [disabled]="!calculationResult() || orderForm.invalid" (click)="submitOrder()">Отправить
+                    <button id="submit" class="button main-submit-request" type="button"
+                        [disabled]="!calculationResult() || orderForm.invalid" (click)="submitOrder()">Отправить
                         заявку
                     </button>
                 </div>
